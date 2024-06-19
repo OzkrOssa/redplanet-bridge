@@ -1,4 +1,4 @@
-module guithub.com/OzkrOssa/rp-bridge
+module guithub.com/OzkrOssa/redplanet-bridge
 
 go 1.22.4
 
