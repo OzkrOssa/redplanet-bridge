@@ -12,7 +12,7 @@ import (
 	"os"
 	"time"
 
-	"guithub.com/OzkrOssa/redplanet-bridge/internal/models"
+	"github.com/OzkrOssa/redplanet-bridge/internal/models"
 )
 
 type PaymentezService struct{}

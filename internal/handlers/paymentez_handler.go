@@ -3,9 +3,9 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/OzkrOssa/redplanet-bridge/internal/models"
+	"github.com/OzkrOssa/redplanet-bridge/internal/services"
 	"github.com/labstack/echo/v5"
-	"guithub.com/OzkrOssa/redplanet-bridge/internal/models"
-	"guithub.com/OzkrOssa/redplanet-bridge/internal/services"
 )
 
 type PaymentezHandler struct {

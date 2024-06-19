@@ -3,10 +3,10 @@ package routes
 import (
 	"os"
 
+	"github.com/OzkrOssa/redplanet-bridge/internal/handlers"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
 	"github.com/pocketbase/pocketbase/core"
-	"guithub.com/OzkrOssa/redplanet-bridge/internal/handlers"
 )
 
 type PaymentezRouter struct{}

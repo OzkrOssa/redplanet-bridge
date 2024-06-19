@@ -5,12 +5,12 @@ import (
 	"os"
 	"strings"
 
+	"github.com/OzkrOssa/redplanet-bridge/internal/v1/routes"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
-	"guithub.com/OzkrOssa/redplanet-bridge/internal/v1/routes"
 )
 
 func main() {
