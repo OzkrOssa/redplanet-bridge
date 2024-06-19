@@ -10,6 +10,7 @@ import (
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
+	"guithub.com/OzkrOssa/redplanet-bridge/internal/v1/routes"
 )
 
 func main() {
@@ -38,6 +39,8 @@ func main() {
 		}))
 
 		//Router
+		paymentezRouter := routes.PaymentezRouter{}
+		paymentezRouter.V1PaymentezRoutes(e)
 		return nil
 	})
 
