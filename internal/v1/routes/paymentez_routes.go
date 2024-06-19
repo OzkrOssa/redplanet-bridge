@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
 	"github.com/pocketbase/pocketbase/core"
+	"guithub.com/OzkrOssa/redplanet-bridge/internal/handlers"
 )
 
 type PaymentezRouter struct{}
@@ -17,11 +18,13 @@ func (t *PaymentezRouter) V1PaymentezRoutes(e *core.ServeEvent) {
 		return key == os.Getenv("BEARER_TOKEN"), nil
 	}))
 
+	paymentezHandler := handlers.NewPaymentezHandler()
+
 	group.GET("/token/:payMethod", echo.HandlerFunc(func(c echo.Context) error {
-		return nil
+		return paymentezHandler.GenerateToken(c)
 	}))
 
 	group.POST("/pse/split", echo.HandlerFunc(func(c echo.Context) error {
-		return nil
+		return paymentezHandler.PsePaymentWithSplit(c)
 	}))
 }
