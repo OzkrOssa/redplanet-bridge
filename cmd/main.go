@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	_ "github.com/OzkrOssa/redplanet-bridge/internal/db/migrations"
 	"github.com/OzkrOssa/redplanet-bridge/internal/v1/routes"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
