@@ -41,7 +41,7 @@ func main() {
 
 		//Router
 		paymentezRouter := routes.PaymentezRouter{}
-		paymentezRouter.V1PaymentezRoutes(e)
+		paymentezRouter.V1PaymentezRoutes(e, app)
 		return nil
 	})
 
