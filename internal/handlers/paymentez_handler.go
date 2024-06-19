@@ -2,18 +2,21 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/OzkrOssa/redplanet-bridge/internal/models"
 	"github.com/OzkrOssa/redplanet-bridge/internal/services"
 	"github.com/labstack/echo/v5"
+	"github.com/pocketbase/pocketbase"
 )
 
 type PaymentezHandler struct {
-	ps services.PaymentezService
+	app *pocketbase.PocketBase
+	ps  *services.PaymentezService
 }
 
-func NewPaymentezHandler() *PaymentezHandler {
-	return &PaymentezHandler{}
+func NewPaymentezHandler(app *pocketbase.PocketBase, ps *services.PaymentezService) *PaymentezHandler {
+	return &PaymentezHandler{app, ps}
 }
 
 func (ph *PaymentezHandler) GenerateToken(c echo.Context) error {
@@ -62,5 +65,50 @@ func (ph *PaymentezHandler) PsePaymentWithSplit(c echo.Context) error {
 		"status":   http.StatusOK,
 		"message":  "pse payment successfully",
 		"response": paymentResponse,
+	})
+}
+
+func (ph *PaymentezHandler) ProcessEventWebHook(c echo.Context) error {
+	logger := ph.app.Logger()
+
+	event := new(models.WebhookEvent)
+
+	if err := c.Bind(event); err != nil {
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"status":  http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
+	err := ph.ps.ProcessEventWebHook(*event)
+	if err != nil {
+		if strings.Contains(err.Error(), "stoken") {
+			logger.Error(
+				"token mismatch",
+				"message", err.Error(),
+				"payload", event,
+			)
+			return c.JSON(http.StatusNonAuthoritativeInfo, map[string]interface{}{
+				"error":   "token mismatch",
+				"message": err.Error(),
+			})
+		}
+		logger.Error(
+			"error to recieved webhook",
+			"message", err.Error(),
+			"payload", event,
+		)
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"error":   "error to recieved webhook",
+			"message": err.Error(),
+		})
+	}
+	logger.Info(
+		"Webhook processed successfully",
+		"payload", event,
+	)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"status":  http.StatusOK,
+		"message": "Webhook processed successfully",
 	})
 }
