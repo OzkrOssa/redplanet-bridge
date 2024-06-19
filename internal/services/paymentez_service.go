@@ -139,3 +139,11 @@ func (s *PaymentezService) PsePaymentWithSplits(data *models.PaymentRequetsPaylo
 
 	return bindResponse, nil
 }
+
+func (s *PaymentezService) ProcessEventWebHook(event models.WebhookEvent) error {
+	err := ValidateStoken(event)
+	if err != nil {
+		return err
+	}
+	return nil
+}
