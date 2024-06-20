@@ -80,7 +80,7 @@ func (ph *PaymentezHandler) ProcessEventWebHook(c echo.Context) error {
 		})
 	}
 
-	err := ph.ps.ProcessEventWebHook(*event)
+	err := ph.ps.ProcessEventWebHook(event)
 	if err != nil {
 		if strings.Contains(err.Error(), "stoken") {
 			logger.Error(

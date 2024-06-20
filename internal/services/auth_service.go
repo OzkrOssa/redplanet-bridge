@@ -10,7 +10,7 @@ import (
 	"github.com/OzkrOssa/redplanet-bridge/internal/models"
 )
 
-func ValidateStoken(event models.WebhookEvent) error {
+func ValidateStoken(event *models.WebhookEvent) error {
 	var appCode, appKey string
 	var temp struct {
 		Split *models.WebHookSplit
