@@ -13,12 +13,15 @@ import (
 	"time"
 
 	"github.com/OzkrOssa/redplanet-bridge/internal/models"
+	"github.com/OzkrOssa/redplanet-bridge/internal/repository"
 )
 
-type PaymentezService struct{}
+type PaymentezService struct {
+	repo *repository.PaymentezRepository
+}
 
-func NewPaymentezService() *PaymentezService {
-	return &PaymentezService{}
+func NewPaymentezService(repo *repository.PaymentezRepository) *PaymentezService {
+	return &PaymentezService{repo}
 }
 
 func (s *PaymentezService) hastData(appKey, appCode string) string {
@@ -140,10 +143,13 @@ func (s *PaymentezService) PsePaymentWithSplits(data *models.PaymentRequetsPaylo
 	return bindResponse, nil
 }
 
-func (s *PaymentezService) ProcessEventWebHook(event models.WebhookEvent) error {
+func (s *PaymentezService) ProcessEventWebHook(event *models.WebhookEvent) error {
 	err := ValidateStoken(event)
 	if err != nil {
 		return err
 	}
+
+	s.repo.StoreWebhook(event)
+
 	return nil
 }

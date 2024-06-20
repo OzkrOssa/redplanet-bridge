@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/OzkrOssa/redplanet-bridge/internal/handlers"
+	"github.com/OzkrOssa/redplanet-bridge/internal/repository"
 	"github.com/OzkrOssa/redplanet-bridge/internal/services"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
@@ -20,7 +21,7 @@ func (t *PaymentezRouter) V1PaymentezRoutes(e *core.ServeEvent, app *pocketbase.
 		return key == os.Getenv("BEARER_TOKEN"), nil
 	}))
 
-	paymentezHandler := handlers.NewPaymentezHandler(app, services.NewPaymentezService())
+	paymentezHandler := handlers.NewPaymentezHandler(app, services.NewPaymentezService(repository.NewPaymentezRepository(app)))
 
 	group.GET("/token/:payMethod", echo.HandlerFunc(func(c echo.Context) error {
 		return paymentezHandler.GenerateToken(c)
@@ -28,5 +29,9 @@ func (t *PaymentezRouter) V1PaymentezRoutes(e *core.ServeEvent, app *pocketbase.
 
 	group.POST("/pse/split", echo.HandlerFunc(func(c echo.Context) error {
 		return paymentezHandler.PsePaymentWithSplit(c)
+	}))
+
+	group.POST("/webhook", echo.HandlerFunc(func(c echo.Context) error {
+		return paymentezHandler.ProcessEventWebHook(c)
 	}))
 }
